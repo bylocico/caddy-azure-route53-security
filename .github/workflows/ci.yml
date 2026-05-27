@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read target version
+        id: version
+        run: echo "version=$(cat VERSION)" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: caddy-azure-route53-security:test
+          build-args: |
+            CADDY_VERSION=${{ steps.version.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Verify caddy version
+        run: docker run --rm caddy-azure-route53-security:test caddy version
+
+      - name: Verify bundled modules
+        run: |
+          modules=$(docker run --rm caddy-azure-route53-security:test caddy list-modules)
+          echo "$modules" | grep -q "dns.providers.route53"
+          echo "$modules" | grep -q "dns.providers.azure"
+          echo "$modules" | grep -q "security"
+          echo "All expected modules found"
