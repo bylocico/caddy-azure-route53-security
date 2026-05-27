@@ -23,7 +23,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 24.x
 
       - id: discover
         shell: bash
@@ -45,7 +45,7 @@ jobs:
     needs: discover
     if: needs.discover.outputs.has_updates == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -55,7 +55,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 24.x
 
       - name: Retarget to Caddy ${{ matrix.caddy_version }}
         run: node scripts/update-version.mjs --version "${{ matrix.caddy_version }}"
@@ -94,7 +94,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 24.x
 
       - run: node scripts/update-version.mjs --version "${{ needs.discover.outputs.latest }}"
 
