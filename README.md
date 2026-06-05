@@ -16,14 +16,14 @@ Previously published as `ghcr.io/thatdoogieguy/caddy-route53-azure`.
 
 The Docker image version tracks the upstream Caddy version. Module versions are pinned separately in the Dockerfile.
 
-For example, `ghcr.io/bylocico/caddy-azure-route53-security:2.11.3` is built from `caddy:2.11.3` with the modules above.
+For example, `ghcr.io/bylocico/caddy-azure-route53-security:2.11.4` is built from `caddy:2.11.4` with the modules above.
 
 A scheduled workflow checks Docker Hub daily for new Caddy releases, builds each one (which also verifies module compatibility via xcaddy), and opens an auto-merge PR.
 
 ## Usage
 
 ```bash
-docker pull ghcr.io/bylocico/caddy-azure-route53-security:2.11.3
+docker pull ghcr.io/bylocico/caddy-azure-route53-security:2.11.4
 ```
 
 ### Docker Compose
@@ -31,7 +31,7 @@ docker pull ghcr.io/bylocico/caddy-azure-route53-security:2.11.3
 ```yaml
 services:
   caddy:
-    image: ghcr.io/bylocico/caddy-azure-route53-security:2.11.3
+    image: ghcr.io/bylocico/caddy-azure-route53-security:2.11.4
     ports:
       - "80:80"
       - "443:443"
@@ -81,7 +81,7 @@ node scripts/update-version.mjs --list-newer
 Retarget to a specific version:
 
 ```bash
-node scripts/update-version.mjs --version 2.11.3
+node scripts/update-version.mjs --version 2.11.4
 ```
 
 ## Publishing
